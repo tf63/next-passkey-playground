@@ -1,36 +1,42 @@
 {
-  "name": "next-passkey-playground",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "next": "15.3.2",
-    "react": "19.1.0",
-    "react-dom": "19.1.0"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "1.9.4",
-    "@tailwindcss/postcss": "4.1.7",
-    "@types/node": "20.17.50",
-    "@types/react": "19.1.0",
-    "@types/react-dom": "19.1.0",
-    "@ianvs/prettier-plugin-sort-imports": "4.4.1",
-    "prettier": "3.5.3",
-    "prettier-plugin-tailwindcss": "0.6.11",
-    "tailwindcss": "4.1.7",
-    "typescript": "5.8.3"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@biomejs/biome",
-      "@tailwindcss/oxide",
-      "core-js",
-      "sharp"
-    ]
-  }
+    "name": "next-passkey-playground",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev --turbopack",
+        "build": "next build",
+        "start": "next start",
+        "lint": "biome lint .",
+        "lint:fix": "biome lint . --write",
+        "format": "prettier . --write",
+        "prepare": "lefthook install"
+    },
+    "dependencies": {
+        "next": "15.3.2",
+        "react": "19.1.0",
+        "react-dom": "19.1.0"
+    },
+    "devDependencies": {
+        "@biomejs/biome": "1.9.4",
+        "@ianvs/prettier-plugin-sort-imports": "4.4.1",
+        "@tailwindcss/postcss": "4.1.7",
+        "@types/node": "20.17.50",
+        "@types/react": "19.1.0",
+        "@types/react-dom": "19.1.0",
+        "lefthook": "1.11.13",
+        "prettier": "3.5.3",
+        "prettier-plugin-tailwindcss": "0.6.11",
+        "tailwindcss": "4.1.7",
+        "typescript": "5.8.3"
+    },
+    "packageManager": "pnpm@10.4.1",
+    "pnpm": {
+        "onlyBuiltDependencies": [
+            "@biomejs/biome",
+            "@tailwindcss/oxide",
+            "core-js",
+            "lefthook",
+            "sharp"
+        ]
+    }
 }
