@@ -3,6 +3,7 @@
 import type { AuthenticationResponseJSON, RegistrationResponseJSON } from '@simplewebauthn/browser'
 import {
     type VerifiedAuthenticationResponse,
+    type VerifiedRegistrationResponse,
     generateAuthenticationOptions,
     generateRegistrationOptions,
     verifyAuthenticationResponse,
@@ -38,7 +39,7 @@ const rpID = 'localhost'
  * 'http://localhost' and 'http://localhost:PORT' are also valid.
  * Do NOT include any trailing /
  */
-const origin = `http://${rpID}:3000`
+const origin = `http://${rpID}:3001`
 
 export async function getRegistrationOptions(username: string) {
     // (Pseudocode) Retrieve the user from the database
@@ -74,7 +75,13 @@ export async function getRegistrationOptions(username: string) {
 
     // (Pseudocode) Remember these options for the user
     setCurrentRegistrationOptions(user, options)
-    return options
+
+    console.log('===============================================')
+    console.log('① パスキー登録オプションの作成')
+    console.log(options)
+    console.log('===============================================')
+
+    return { options, message: 'パスキー登録オプションを取得しました' }
 }
 
 export async function verifyRegistration(username: string, body: RegistrationResponseJSON) {
@@ -83,24 +90,24 @@ export async function verifyRegistration(username: string, body: RegistrationRes
 
     // (Pseudocode) Get `options.challenge` that was saved above
     const currentOptions = getCurrentRegistrationOptions(user)
-    if (!currentOptions) throw new Error('No registration options found for user')
+    if (!currentOptions) return { verified: false, message: 'Registration options not found' }
 
-    // let verification: VerifiedRegistrationResponse
-    // try {
-    const verification = await verifyRegistrationResponse({
-        response: body,
-        expectedChallenge: currentOptions.challenge,
-        expectedOrigin: origin,
-        expectedRPID: rpID,
-    })
-    // } catch (error) {
-    //     console.error(error)
-    //     return { verified: false }
-    // }
+    let verification: VerifiedRegistrationResponse
+    try {
+        verification = await verifyRegistrationResponse({
+            response: body,
+            expectedChallenge: currentOptions.challenge,
+            expectedOrigin: origin,
+            expectedRPID: rpID,
+        })
+    } catch (error) {
+        console.error(error)
+        return { verified: false, message: 'Registration verification failed' }
+    }
 
     const { verified, registrationInfo } = verification
+    if (!verified || !registrationInfo) return { verified: false, message: 'Verification failed' }
 
-    if (!verified || !registrationInfo) throw new Error('Registration verification failed')
     const { credential, credentialDeviceType, credentialBackedUp } = registrationInfo
 
     const newPasskey = {
@@ -127,46 +134,57 @@ export async function verifyRegistration(username: string, body: RegistrationRes
     saveNewPasskeyInDB(newPasskey)
     saveUserInDB(user)
 
-    return { verified: true }
+    console.log('===============================================')
+    console.log('② 認証情報の保存')
+    console.log(newPasskey)
+    console.log('===============================================')
+
+    return { verified: true, message: 'Registration successful' }
 }
 
 export async function getAuthenticationOptions(username: string) {
     // (Pseudocode) Retrieve the logged-in user
     const user = getUserFromDB(username)
-    if (!user) throw new Error('User not found')
+    if (!user) return { options: undefined, message: 'User not found' }
 
     // (Pseudocode) Retrieve any of the user's previously-
     // registered authenticators
-    const userPasskeys: Passkey[] = getUserPasskeys(user)
+    // const userPasskeys: Passkey[] = getUserPasskeys(user)
 
     const options = await generateAuthenticationOptions({
         rpID,
         // Require users to use a previously-registered authenticator
-        allowCredentials: userPasskeys.map((passkey) => ({
-            id: passkey.id,
-            transports: passkey.transports,
-        })),
+        // allowCredentials: userPasskeys.map((passkey) => ({
+        //     id: passkey.id,
+        //     transports: passkey.transports,
+        // })),
+        allowCredentials: [],
     })
+
+    console.log('===============================================')
+    console.log('① パスキー認証オプションの作成')
+    console.log(options)
+    console.log('===============================================')
 
     // (Pseudocode) Remember this challenge for this user
     setCurrentAuthenticationOptions(user, options)
 
-    return options
+    return { options, message: 'パスキー認証オプションを取得しました' }
 }
 
 export async function verifyAuthentication(username: string, body: AuthenticationResponseJSON) {
     // (Pseudocode) Retrieve the logged-in user
     const user = getUserFromDB(username)
-    if (!user) return { verified: false }
+    if (!user) return { verified: false, message: 'User not found' }
 
     // (Pseudocode) Get `options.challenge` that was saved above
     const currentOptions = getCurrentAuthenticationOptions(user)
-    if (!currentOptions) return { verified: false }
+    if (!currentOptions) return { verified: false, message: 'Authentication options not found' }
 
     // (Pseudocode} Retrieve a passkey from the DB that
     // should match the `id` in the returned credential
     const passkey = getUserPasskey(user, body.id)
-    if (!passkey) return { verified: false }
+    if (!passkey) return { verified: false, message: 'Passkey not found' }
 
     let verification: VerifiedAuthenticationResponse
     try {
@@ -184,13 +202,18 @@ export async function verifyAuthentication(username: string, body: Authenticatio
         })
     } catch (error) {
         console.error(error)
-        return { verified: false }
+        return { verified: false, message: 'Authentication verification failed' }
     }
 
+    console.log('===============================================')
+    console.log('② パスキーの検証')
+    console.log(verification)
+    console.log('===============================================')
+
     const { verified, authenticationInfo } = verification
-    if (!verified) return { verified: false }
+    if (!verified) return { verified: false, message: 'Verification failed' }
 
     const { newCounter } = authenticationInfo
     saveUpdatedCounter(passkey, newCounter)
-    return { verified: true }
+    return { verified: true, message: 'Authentication successful' }
 }

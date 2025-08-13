@@ -25,7 +25,7 @@
             },
             "suspicious": {
                 "recommended": true,
-                "noConsoleLog": "warn",
+                "noConsoleLog": "off",
                 "noDebugger": "error",
                 "useAwait": "error"
             },
@@ -33,6 +33,7 @@
         },
 
         "ignore": [
+            "**/components/ui/**/*",
             "**/tsconfig.*",
             "**/vite.config.*",
             "**/next.config.*",
