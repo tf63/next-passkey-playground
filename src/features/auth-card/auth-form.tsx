@@ -1,6 +1,7 @@
 'use client'
 
 import { Key } from 'lucide-react'
+import { redirect } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import { toast } from 'sonner'
 
@@ -25,8 +26,13 @@ export function AuthForm() {
                 return
             }
 
-            // TODO: 実際にはパスワード検証が入る
-            await registerAction({ email, password })
+            const result = await registerAction({ email, password })
+            if (!result.success) {
+                toast.error(result.message)
+                return
+            }
+
+            redirect('/')
         })
     }
 
@@ -39,8 +45,13 @@ export function AuthForm() {
                 return
             }
 
-            // TODO: 実際にはパスワード検証が入る
-            await signInAction({ email, password })
+            const result = await signInAction({ email, password })
+            if (!result.success) {
+                toast.error(result.message)
+                return
+            }
+
+            redirect('/')
         })
     }
 
@@ -76,6 +87,7 @@ export function AuthForm() {
                             id="signin-email"
                             type="email"
                             placeholder="you@example.com"
+                            autoComplete="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
@@ -86,6 +98,7 @@ export function AuthForm() {
                             id="signin-password"
                             type="password"
                             placeholder="••••••••"
+                            autoComplete="current-password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
