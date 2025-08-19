@@ -1,4 +1,4 @@
-import { Calendar, Home, Inbox, Search, Settings, UserCheck, UserPlus } from 'lucide-react'
+import { Calendar, Home, Inbox, Key, Search, Settings, UserCheck, UserPlus } from 'lucide-react'
 
 import {
     SidebarContent,
@@ -13,12 +13,12 @@ import {
 const documentItems = [
     {
         title: '登録フロー',
-        url: '#',
+        url: '/#',
         icon: UserPlus,
     },
     {
         title: '検証フロー',
-        url: '#',
+        url: '/#',
         icon: UserCheck,
     },
 ]
@@ -26,27 +26,27 @@ const documentItems = [
 const dataItems = [
     {
         title: 'Home',
-        url: '#',
+        url: '/#',
         icon: Home,
     },
     {
         title: 'Inbox',
-        url: '#',
+        url: '/#',
         icon: Inbox,
     },
     {
         title: 'Calendar',
-        url: '#',
+        url: '/#',
         icon: Calendar,
     },
     {
         title: 'Search',
-        url: '#',
+        url: '/#',
         icon: Search,
     },
     {
         title: 'Settings',
-        url: '#',
+        url: '/#',
         icon: Settings,
     },
 ]
@@ -54,6 +54,22 @@ const dataItems = [
 export function DashboardSidebarContent() {
     return (
         <SidebarContent>
+            <SidebarGroup>
+                <SidebarGroupLabel>Passkey</SidebarGroupLabel>
+                <SidebarGroupContent>
+                    <SidebarMenu>
+                        <SidebarMenuItem>
+                            <SidebarMenuButton asChild={true}>
+                                <a href={'/passkey'}>
+                                    <Key />
+                                    <span>パスキー登録</span>
+                                </a>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                    </SidebarMenu>
+                </SidebarGroupContent>
+            </SidebarGroup>
+
             <SidebarGroup>
                 <SidebarGroupLabel>Document</SidebarGroupLabel>
                 <SidebarGroupContent>

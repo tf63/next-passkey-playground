@@ -25,13 +25,15 @@ export async function DashboardSidebarFooter() {
                                 <ChevronUp className="ml-auto" />
                             </SidebarMenuButton>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent side="top" className="w-[--radix-popper-anchor-width]">
+                        <DropdownMenuContent side="top" className="w-[--radix-popper-anchor-width] px-1">
                             <DropdownMenuItem>
                                 <span>Account</span>
                             </DropdownMenuItem>
                             <DropdownMenuItem>
-                                <form action={signOutAction}>
-                                    <button type="submit">Sign out</button>
+                                <form action={signOutAction} className="w-full">
+                                    <button type="submit" className="w-full text-start">
+                                        Sign out
+                                    </button>
                                 </form>
                             </DropdownMenuItem>
                         </DropdownMenuContent>
