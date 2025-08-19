@@ -1,0 +1,94 @@
+import { Calendar, Home, Inbox, Search, Settings, UserCheck, UserPlus } from 'lucide-react'
+
+import {
+    SidebarContent,
+    SidebarGroup,
+    SidebarGroupContent,
+    SidebarGroupLabel,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+} from '@/components/ui/sidebar'
+
+const documentItems = [
+    {
+        title: '登録フロー',
+        url: '#',
+        icon: UserPlus,
+    },
+    {
+        title: '検証フロー',
+        url: '#',
+        icon: UserCheck,
+    },
+]
+
+const dataItems = [
+    {
+        title: 'Home',
+        url: '#',
+        icon: Home,
+    },
+    {
+        title: 'Inbox',
+        url: '#',
+        icon: Inbox,
+    },
+    {
+        title: 'Calendar',
+        url: '#',
+        icon: Calendar,
+    },
+    {
+        title: 'Search',
+        url: '#',
+        icon: Search,
+    },
+    {
+        title: 'Settings',
+        url: '#',
+        icon: Settings,
+    },
+]
+
+export function DashboardSidebarContent() {
+    return (
+        <SidebarContent>
+            <SidebarGroup>
+                <SidebarGroupLabel>Document</SidebarGroupLabel>
+                <SidebarGroupContent>
+                    <SidebarMenu>
+                        {documentItems.map((item) => (
+                            <SidebarMenuItem key={item.title}>
+                                <SidebarMenuButton asChild={true}>
+                                    <a href={item.url}>
+                                        <item.icon />
+                                        <span>{item.title}</span>
+                                    </a>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        ))}
+                    </SidebarMenu>
+                </SidebarGroupContent>
+            </SidebarGroup>
+
+            <SidebarGroup>
+                <SidebarGroupLabel>Data</SidebarGroupLabel>
+                <SidebarGroupContent>
+                    <SidebarMenu>
+                        {dataItems.map((item) => (
+                            <SidebarMenuItem key={item.title}>
+                                <SidebarMenuButton asChild={true}>
+                                    <a href={item.url}>
+                                        <item.icon />
+                                        <span>{item.title}</span>
+                                    </a>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        ))}
+                    </SidebarMenu>
+                </SidebarGroupContent>
+            </SidebarGroup>
+        </SidebarContent>
+    )
+}
