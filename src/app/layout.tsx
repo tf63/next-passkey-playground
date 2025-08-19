@@ -28,7 +28,7 @@ export default function RootLayout({
     return (
         <html lang="ja" className="dark">
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-                <main className="min-h-screen min-w-screen space-y-4 p-4">{children}</main>
+                <main className="min-h-screen min-w-screen">{children}</main>
                 <Toaster theme="dark" richColors={true} position="top-center" />
             </body>
         </html>

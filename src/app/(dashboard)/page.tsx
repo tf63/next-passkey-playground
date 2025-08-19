@@ -6,11 +6,12 @@ import '@/app/actions/auth'
 import '@/components/ui/accordion'
 
 import { Card } from '@/components/ui/card'
+import { DashboardTitle } from '@/features/dashboard/title/title'
 
 export default function Page() {
     return (
-        <div>
-            <h1 className="mb-4 text-2xl font-bold">パスキー登録フロー</h1>
+        <>
+            <DashboardTitle title="タイトル" />
             <Card className="p-5">
                 <pre className="overflow-x-auto">
                     {`{
@@ -36,6 +37,6 @@ export default function Page() {
 }`}
                 </pre>
             </Card>
-        </div>
+        </>
     )
 }
