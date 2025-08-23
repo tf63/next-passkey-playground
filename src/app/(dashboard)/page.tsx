@@ -1,10 +1,5 @@
 'use client'
 
-import '@simplewebauthn/browser'
-import 'react'
-import '@/app/actions/auth'
-import '@/components/ui/accordion'
-
 import { Card } from '@/components/ui/card'
 import { DashboardTitle } from '@/features/dashboard/title/title'
 

@@ -15,12 +15,12 @@ export async function DashboardSidebarFooter() {
     const email = session?.user?.email
 
     return (
-        <SidebarFooter>
+        <SidebarFooter className="px-4">
             <SidebarMenu>
                 <SidebarMenuItem>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild={true}>
-                            <SidebarMenuButton>
+                            <SidebarMenuButton tooltip="Account">
                                 <User2 /> <span className="truncate">{email ? email : 'Invalid User'}</span>
                                 <ChevronUp className="ml-auto" />
                             </SidebarMenuButton>

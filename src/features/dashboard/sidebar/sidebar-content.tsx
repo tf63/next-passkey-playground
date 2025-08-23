@@ -54,12 +54,12 @@ const dataItems = [
 export function DashboardSidebarContent() {
     return (
         <SidebarContent>
-            <SidebarGroup>
+            <SidebarGroup className="px-4">
                 <SidebarGroupLabel>Passkey</SidebarGroupLabel>
                 <SidebarGroupContent>
                     <SidebarMenu>
                         <SidebarMenuItem>
-                            <SidebarMenuButton asChild={true}>
+                            <SidebarMenuButton asChild={true} tooltip="パスキー登録">
                                 <a href={'/passkey'}>
                                     <Key />
                                     <span>パスキー登録</span>
@@ -70,13 +70,13 @@ export function DashboardSidebarContent() {
                 </SidebarGroupContent>
             </SidebarGroup>
 
-            <SidebarGroup>
+            <SidebarGroup className="px-4">
                 <SidebarGroupLabel>Document</SidebarGroupLabel>
                 <SidebarGroupContent>
                     <SidebarMenu>
                         {documentItems.map((item) => (
                             <SidebarMenuItem key={item.title}>
-                                <SidebarMenuButton asChild={true}>
+                                <SidebarMenuButton asChild={true} tooltip={item.title}>
                                     <a href={item.url}>
                                         <item.icon />
                                         <span>{item.title}</span>
@@ -88,13 +88,13 @@ export function DashboardSidebarContent() {
                 </SidebarGroupContent>
             </SidebarGroup>
 
-            <SidebarGroup>
+            <SidebarGroup className="px-4">
                 <SidebarGroupLabel>Data</SidebarGroupLabel>
                 <SidebarGroupContent>
                     <SidebarMenu>
                         {dataItems.map((item) => (
                             <SidebarMenuItem key={item.title}>
-                                <SidebarMenuButton asChild={true}>
+                                <SidebarMenuButton asChild={true} tooltip={item.title}>
                                     <a href={item.url}>
                                         <item.icon />
                                         <span>{item.title}</span>

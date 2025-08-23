@@ -4,12 +4,12 @@ import { SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '
 
 export function DashboardSidebarHeader() {
     return (
-        <SidebarHeader>
+        <SidebarHeader className="px-4">
             <SidebarMenu>
                 <SidebarMenuItem>
-                    <SidebarMenuButton asChild={true}>
+                    <SidebarMenuButton asChild={true} tooltip="Home">
                         <a href="/">
-                            <Key />
+                            <Key className="w-4" />
                             <span>Passkey Sample</span>
                         </a>
                     </SidebarMenuButton>
