@@ -1,9 +1,9 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from "tailwindcss"
 
 const config: Config = {
-    content: ['./src/**/*.{jsx,tsx,mdx}', '!./src/**/*.stories.*'],
-    theme: {},
-    plugins: [],
+	content: ["./src/**/*.{jsx,tsx,mdx}", "!./src/**/*.stories.*"],
+	theme: {},
+	plugins: [],
 }
 
 export default config

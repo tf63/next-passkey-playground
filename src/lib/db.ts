@@ -1,17 +1,17 @@
-import type {} from '@simplewebauthn/server'
+import type {} from "@simplewebauthn/server"
 
 export type User = {
-    id: string
-    email: string
-    hashedPassword: string
+	id: string
+	email: string
+	hashedPassword: string
 }
 
 export function createUser(email: string, hashedPassword: string) {
-    userDB.push({ id: `${userDB.length}`, email, hashedPassword })
+	userDB.push({ id: `${userDB.length}`, email, hashedPassword })
 }
 
 export function getUserByEmail(email: string) {
-    return userDB.find((user) => user.email === email)
+	return userDB.find((user) => user.email === email)
 }
 
 // export const userDB = new Map<string, User>()

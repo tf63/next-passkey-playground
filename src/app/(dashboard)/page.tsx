@@ -1,15 +1,15 @@
-'use client'
+"use client"
 
-import { Card } from '@/components/ui/card'
-import { DashboardTitle } from '@/features/dashboard/title/title'
+import { Card } from "@/components/ui/card"
+import { DashboardTitle } from "@/features/dashboard/title/title"
 
 export default function Page() {
-    return (
-        <>
-            <DashboardTitle title="タイトル" />
-            <Card className="p-5">
-                <pre className="overflow-x-auto">
-                    {`{
+	return (
+		<>
+			<DashboardTitle title="タイトル" />
+			<Card className="p-5">
+				<pre className="overflow-x-auto">
+					{`{
   "id": "ifi832jQU5_9xl2LIgq0jFT8yE4UNNhmzTVjetd3ZCI",
   "rawId": "ifi832jQU5_9xl2LIgq0jFT8yE4UNNhmzTVjetd3ZCI",
   "response": {
@@ -30,8 +30,8 @@ export default function Page() {
   },
   "authenticatorAttachment": "platform"
 }`}
-                </pre>
-            </Card>
-        </>
-    )
+				</pre>
+			</Card>
+		</>
+	)
 }

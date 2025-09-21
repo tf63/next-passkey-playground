@@ -1,91 +1,144 @@
 {
-    "$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
-    "formatter": {
-        "enabled": false
-    },
-    "linter": {
-        "enabled": true,
-        "rules": {
-            "a11y": { "recommended": true },
-            "complexity": { "recommended": true, "noBannedTypes": "off", "useArrowFunction": "error" },
-            "correctness": {
-                "recommended": true,
-                "noUnusedImports": "error",
-                "noUnusedVariables": "error",
-                "useHookAtTopLevel": "error",
-                "noEmptyPattern": "off"
-            },
-            "performance": { "recommended": true },
-            "security": { "recommended": true },
-            "style": {
-                "recommended": true,
-                "noDefaultExport": "off",
-                "noImplicitBoolean": "error",
-                "noNonNullAssertion": "warn"
-            },
-            "suspicious": {
-                "recommended": true,
-                "noConsoleLog": "off",
-                "noDebugger": "error",
-                "useAwait": "error"
-            },
-            "nursery": { "useSortedClasses": "off" }
-        },
-
-        "ignore": [
-            "**/components/ui/**/*",
-            "**/tsconfig.*",
-            "**/vite.config.*",
-            "**/next.config.*",
-            "**/tailwind.config.*",
-            "**/postcss.config.*",
-            "**/plopfile.*",
-            "**/jest.config.*",
-            "**/package-lock.json",
-            "**/yarn.lock",
-            "**/pnpm-lock.yaml",
-            "**/.DS_Store",
-            "**/node_modules/**/*",
-            "**/public/**/*",
-            "**/dist/**/*",
-            "**/dist-ssr/**/*",
-            "**/build/**/*",
-            "**/storybook-static/**/*",
-            "**/coverage/**/*",
-            "**/bin/**/*",
-            "**/obj/**/*",
-            "**/out/**/*",
-            "**/.yarn/**/*",
-            "**/.pnpm-store/**/*",
-            "**/.next/**/*",
-            "**/.vercel/**/*",
-            "**/.swc/**/*",
-            "**/.turbo/**/*",
-            "**/*.mdx"
-        ]
-    },
-    "json": {
-        "parser": {
-            "allowComments": true
-        }
-    },
-    "overrides": [
-        {
-            "include": ["features/", "components/", "lib/"],
-            "linter": {
-                "rules": {
-                    "style": { "noDefaultExport": "error" }
-                }
-            }
-        },
-        {
-            "include": ["*.stories.*", "*.story.*"],
-            "linter": {
-                "rules": {
-                    "style": { "noDefaultExport": "off" },
-                    "correctness": { "useHookAtTopLevel": "off" }
-                }
-            }
-        }
-    ]
+	"$schema": "https://biomejs.dev/schemas/2.2.4/schema.json",
+	"files": {
+		"includes": [
+			"**",
+			"!src/components/ui/**/*",
+			"!**/*.css",
+			"!**/package-lock.json",
+			"!**/yarn.lock",
+			"!**/pnpm-lock.yaml",
+			"!**/node_modules/**/*",
+			"!**/public/**/*",
+			"!**/dist/**/*",
+			"!**/dist-ssr/**/*",
+			"!**/build/**/*",
+			"!**/storybook-static/**/*",
+			"!**/coverage/**/*",
+			"!**/bin/**/*",
+			"!**/obj/**/*",
+			"!**/out/**/*",
+			"!**/.yarn/**/*",
+			"!**/.pnpm-store/**/*",
+			"!**/.next/**/*",
+			"!**/.vercel/**/*",
+			"!**/.swc/**/*",
+			"!**/.turbo/**/*"
+		]
+	},
+	"formatter": {
+		"enabled": true,
+		"lineWidth": 119,
+		"indentStyle": "tab",
+		"indentWidth": 2,
+		"includes": [
+			"**/*.js",
+			"**/*.mjs",
+			"**/*.cjs",
+			"**/*.jsx",
+			"**/*.ts",
+			"**/*.mts",
+			"**/*.cts",
+			"**/*.tsx",
+			"**/*.json",
+			"**/*.jsonc"
+		]
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"a11y": { "recommended": true },
+			"complexity": { "recommended": true, "noBannedTypes": "off", "useArrowFunction": "error" },
+			"correctness": {
+				"recommended": true,
+				"noUnusedImports": "error",
+				"noUnusedVariables": "error",
+				"useHookAtTopLevel": "error",
+				"noEmptyPattern": "off",
+				"useUniqueElementIds": "off"
+			},
+			"performance": { "recommended": true },
+			"security": { "recommended": true },
+			"style": {
+				"recommended": true,
+				"noDefaultExport": "off",
+				"noImplicitBoolean": "error",
+				"noNonNullAssertion": "warn"
+			},
+			"suspicious": {
+				"recommended": true,
+				"noConsole": "warn",
+				"noDebugger": "error",
+				"useAwait": "error"
+			},
+			"nursery": { "useSortedClasses": "off" }
+		},
+		"includes": [
+			"**",
+			"!**/vite.config.*",
+			"!**/next.config.*",
+			"!**/tailwind.config.*",
+			"!**/postcss.config.*",
+			"!**/plopfile.*",
+			"!**/jest.config.*"
+		]
+	},
+	"assist": {
+		"enabled": true,
+		"actions": {
+			"source": {
+				"useSortedKeys": "off",
+				"useSortedAttributes": "off",
+				"useSortedProperties": "off",
+				"organizeImports": {
+					"level": "on",
+					"options": {
+						"groups": [
+							":BUN:",
+							":NODE:",
+							["npm:*", "npm:*/**"],
+							":PACKAGE_WITH_PROTOCOL:",
+							":URL:",
+							":PACKAGE:",
+							["/**"],
+							["#*", "#*/**"],
+							":PATH:"
+						]
+					}
+				}
+			}
+		}
+	},
+	"json": {
+		"parser": {
+			"allowComments": true
+		}
+	},
+	"javascript": {
+		"formatter": {
+			"quoteStyle": "double",
+			"quoteProperties": "asNeeded",
+			"semicolons": "asNeeded",
+			"trailingCommas": "es5"
+		}
+	},
+	"overrides": [
+		{
+			"includes": ["features/", "components/", "lib/"],
+			"linter": {
+				"rules": {
+					"style": { "noDefaultExport": "error" }
+				}
+			}
+		},
+		{
+			"includes": ["*.stories.*", "*.story.*"],
+			"linter": {
+				"rules": {
+					"style": { "noDefaultExport": "off" },
+					"correctness": { "useHookAtTopLevel": "off" }
+				}
+			}
+		}
+	]
 }

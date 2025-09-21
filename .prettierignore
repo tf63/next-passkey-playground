@@ -1,3 +1,15 @@
+# biome conflict
+*.json
+*.jsonc
+*.js
+*.cjs
+*.mjs
+*.jsx
+*.ts
+*.mts
+*.cts
+*.tsx
+
 # lock
 **/package-lock.json
 **/yarn.lock
