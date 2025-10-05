@@ -2,7 +2,7 @@
 
 import bcrypt from "bcryptjs"
 import { signIn } from "@/auth"
-import { createUser, getUserByEmail } from "@/lib/db"
+import { createUser, getUserByEmail } from "@/lib/db/memory"
 
 export async function registerAction({ email, password }: { email: string; password: string }) {
 	await new Promise((resolve) => setTimeout(resolve, 1000)) // 待機時間入れておく

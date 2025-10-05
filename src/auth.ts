@@ -1,7 +1,19 @@
 import bcrypt from "bcryptjs"
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
-import { getUserByEmail } from "@/lib/db"
+import { getUserByEmail } from "@/lib/db/memory"
+
+declare module "next-auth" {
+	/**
+	 * Returned by `auth`, `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
+	 */
+	interface Session {
+		user: {
+			id: string
+			email: string
+		}
+	}
+}
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
 	providers: [
