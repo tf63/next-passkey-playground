@@ -15,14 +15,11 @@ const userDB: User[] = []
 
 export function createUser(email: string, hashedPassword: string) {
 	userDB.push({ id: `${userDB.length}`, email, hashedPassword })
-	console.log(userDB)
 }
 export function getUserByEmail(email: string) {
-	console.log(userDB)
 	return userDB.find((user) => user.email === email)
 }
 export function getUserIDByEmail(email: string) {
-	console.log(userDB)
 	const user = userDB.find((user) => user.email === email)
 	return user?.id
 }
