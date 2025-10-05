@@ -58,10 +58,10 @@ export function DashboardSidebarContent() {
 				<SidebarGroupContent>
 					<SidebarMenu>
 						<SidebarMenuItem>
-							<SidebarMenuButton asChild={true} tooltip="パスキー登録">
+							<SidebarMenuButton asChild={true} tooltip="パスキー管理">
 								<a href={"/passkey"}>
 									<Key />
-									<span>パスキー登録</span>
+									<span>パスキー管理</span>
 								</a>
 							</SidebarMenuButton>
 						</SidebarMenuItem>
