@@ -1,5 +1,6 @@
 // 実験用のインメモリDB
 // 実際のサービスでは、永続化されたDBを使用する
+import "server-only"
 
 import type { AuthenticatorTransportFuture, Base64URLString, CredentialDeviceType } from "@simplewebauthn/server"
 
@@ -69,45 +70,39 @@ export function getUserPasskey(userID: string, passkeyId: Base64URLString) {
 export function createUserPasskey(passkey: Passkey) {
 	passkeyDB.push(passkey)
 }
-export function updateUserPasskeyCounter(passkey: Passkey, counter: number): void {
+export function savePasskey(passkey: Passkey) {
 	const existingIndex = passkeyDB.findIndex((p) => p.id === passkey.id)
 	if (existingIndex === -1) {
-		throw new Error(`Passkey with id ${passkey.id} not found`)
-	}
-	passkeyDB[existingIndex] = { ...passkeyDB[existingIndex], counter }
-}
-// ----------------------------------------------------------------
-// Passkey Data
-// ----------------------------------------------------------------
-// userIDとoptionsは一対一になる
-type PasskeyRegistrationData = { userID: string; options: PublicKeyCredentialCreationOptionsJSON }
-type PasskeyAuthenticationData = { userID: string; options: PublicKeyCredentialRequestOptionsJSON }
-const passkeyRegistrationDB: PasskeyRegistrationData[] = []
-const passkeyAuthenticationDB: PasskeyAuthenticationData[] = []
-
-export function getPasskeyRegistration(userID: string) {
-	return passkeyRegistrationDB.find((registration) => registration.userID === userID)
-}
-export function setPasskeyRegistration(userID: string, options: PublicKeyCredentialCreationOptionsJSON) {
-	const newData = { userID, options }
-	const existingIndex = passkeyRegistrationDB.findIndex((registration) => registration.userID === userID)
-	if (existingIndex === -1) {
-		passkeyRegistrationDB.push(newData)
+		passkeyDB.push(passkey)
 		return
 	}
-
-	passkeyRegistrationDB[existingIndex] = newData
+	passkeyDB[existingIndex] = passkey
 }
-export function getPasskeyAuthentication(userID: string) {
-	return passkeyAuthenticationDB.find((authentication) => authentication.userID === userID)
-}
-export function setPasskeyAuthentication(userID: string, options: PublicKeyCredentialRequestOptionsJSON) {
-	const newData = { userID, options }
-	const existingIndex = passkeyAuthenticationDB.findIndex((authentication) => authentication.userID === userID)
-	if (existingIndex === -1) {
-		passkeyAuthenticationDB.push(newData)
-		return
-	}
 
-	passkeyAuthenticationDB[existingIndex] = newData
+// ----------------------------------------------------------------
+// Passkey Options Data
+// ----------------------------------------------------------------
+type RegistrationChallenge = { challengeStr: string; userID: string }
+type AuthenticationChallenge = { challengeStr: string; sessionID: string }
+const passkeyRegistrationChallengeStore: Map<string, RegistrationChallenge> = new Map()
+const passkeyAuthenticationChallengeStore: Map<string, AuthenticationChallenge> = new Map()
+
+export function getPasskeyRegistrationChallengeByUserID(userID: string) {
+	const challenge = passkeyRegistrationChallengeStore.get(userID)
+	return challenge
+}
+export function setPasskeyRegistrationChallenge({ challengeStr, userID }: RegistrationChallenge) {
+	passkeyRegistrationChallengeStore.set(userID, { challengeStr, userID })
+}
+export function deletePasskeyRegistrationChallengeByUserID(userID: string) {
+	passkeyRegistrationChallengeStore.delete(userID)
+}
+export function getPasskeyAuthenticationChallengeBySessionID(sessionID: string) {
+	return passkeyAuthenticationChallengeStore.get(sessionID)
+}
+export function setPasskeyAuthenticationChallenge({ challengeStr, sessionID }: AuthenticationChallenge) {
+	passkeyAuthenticationChallengeStore.set(sessionID, { challengeStr, sessionID })
+}
+export function deletePasskeyAuthenticationChallengeBySessionID(sessionID: string) {
+	passkeyAuthenticationChallengeStore.delete(sessionID)
 }
