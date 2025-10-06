@@ -12,25 +12,24 @@ import {
 	createPasskey,
 	deletePasskeyRegistrationChallengeByUserID,
 	getPasskeyRegistrationChallengeByUserID,
-	getUserIDByEmail,
+	getUserByEmail,
 	getUserPasskeys,
 	type Passkey,
 	setPasskeyRegistrationChallenge,
 } from "@/lib/db/memory"
 
-type RegisterationOptionsResponse = {
-	options: PublicKeyCredentialCreationOptionsJSON | undefined
+export async function getRegistrationOptions(email: string): Promise<{
+	options: PublicKeyCredentialCreationOptionsJSON | null
 	message: string
-}
-export async function getRegistrationOptions(email: string): Promise<RegisterationOptionsResponse> {
+}> {
 	// (Pseudocode) Retrieve the user from the database
 	// after they've logged in
-	const userID = getUserIDByEmail(email)
-	if (!userID) return { options: undefined, message: "User not found" }
+	const user = getUserByEmail(email)
+	if (!user) return { options: null, message: "User not found" }
 
 	// (Pseudocode) Retrieve any of the user's previously-
 	// registered authenticators
-	const userPasskeys = getUserPasskeys(userID)
+	const userPasskeys = getUserPasskeys(user.id)
 
 	const options: PublicKeyCredentialCreationOptionsJSON = await generateRegistrationOptions({
 		rpName: RP_NAME,
@@ -56,7 +55,7 @@ export async function getRegistrationOptions(email: string): Promise<Registerati
 	})
 
 	// (Pseudocode) Remember these options for the user
-	setPasskeyRegistrationChallenge({ challengeStr: options.challenge, userID })
+	setPasskeyRegistrationChallenge({ challengeStr: options.challenge, userID: user.id })
 
 	console.log("=============================================")
 	console.log("[Server -> Client] ① パスキー登録オプションの作成")
@@ -65,17 +64,23 @@ export async function getRegistrationOptions(email: string): Promise<Registerati
 	return { options, message: "パスキー登録オプションを取得しました" }
 }
 
-export async function verifyRegistration(email: string, body: RegistrationResponseJSON) {
+export async function verifyRegistration(
+	email: string,
+	body: RegistrationResponseJSON
+): Promise<{
+	verified: boolean
+	message: string
+}> {
 	console.log("=============================================")
 	console.log("[Client -> Server] ② パスキーの登録リクエスト")
 	console.log(body)
 
 	// (Pseudocode) Retrieve the logged-in user
-	const userID = getUserIDByEmail(email)
-	if (!userID) return { verified: false, message: "User not found" }
+	const user = getUserByEmail(email)
+	if (!user) return { verified: false, message: "User not found" }
 
 	// (Pseudocode) Get `options.challenge` that was saved above
-	const currentChallenge = getPasskeyRegistrationChallengeByUserID(userID)
+	const currentChallenge = getPasskeyRegistrationChallengeByUserID(user.id)
 	if (!currentChallenge) return { verified: false, message: "Registration options not found" }
 
 	let verification: VerifiedRegistrationResponse
@@ -104,7 +109,7 @@ export async function verifyRegistration(email: string, body: RegistrationRespon
 
 	const newPasskey = {
 		// `user` here is from Step 2
-		userID: userID,
+		userID: user.id,
 		// Created by `generateRegistrationOptions()` in Step 1
 		webAuthnUserID: currentChallenge.userID,
 		// A unique identifier for the credential
@@ -129,6 +134,6 @@ export async function verifyRegistration(email: string, body: RegistrationRespon
 	console.log("[Server -> Server] ④ パスキーを保存")
 	console.log(newPasskey)
 
-	deletePasskeyRegistrationChallengeByUserID(userID)
+	deletePasskeyRegistrationChallengeByUserID(user.id)
 	return { verified: true, message: "Registration verified and passkey saved" }
 }

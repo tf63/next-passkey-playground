@@ -18,11 +18,19 @@ export function createUser(email: string, hashedPassword: string) {
 	userDB.push({ id: `${userDB.length}`, email, hashedPassword })
 }
 export function getUserByEmail(email: string) {
-	return userDB.find((user) => user.email === email)
+	const userWithCredential = userDB.find((user) => user.email === email)
+	if (!userWithCredential) return undefined
+	const user = { id: userWithCredential.id, email: userWithCredential.email }
+	return user
 }
-export function getUserIDByEmail(email: string) {
-	const user = userDB.find((user) => user.email === email)
-	return user?.id
+export function getUserByID(id: string) {
+	const userWithCredential = userDB.find((user) => user.id === id)
+	if (!userWithCredential) return undefined
+	const user = { id: userWithCredential.id, email: userWithCredential.email }
+	return user
+}
+export function getUserByEmailWithCredential(email: string) {
+	return userDB.find((user) => user.email === email)
 }
 // ----------------------------------------------------------------
 // Passkey
