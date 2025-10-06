@@ -5,6 +5,11 @@ export default auth((req) => {
 		const newUrl = new URL("/sign-in", req.nextUrl.origin)
 		return Response.redirect(newUrl)
 	}
+
+	if (req.nextUrl.pathname === "/") {
+		const newUrl = new URL("/passkey", req.nextUrl.origin)
+		return Response.redirect(newUrl)
+	}
 })
 
 export const config = {
