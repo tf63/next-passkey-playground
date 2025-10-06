@@ -10,22 +10,25 @@ export function PasskeyRegisterBlock({ email }: { email: string }) {
 
 	const handleRegister = () => {
 		startTransition(async () => {
-			if (!email) {
-				alert("メールアドレスが取得できませんでした。サインインしてください。")
-				return
-			}
+			try {
+				if (!email) {
+					throw new Error("メールアドレスが未設定です")
+				}
 
-			const { options, message } = await getRegistrationOptions(email)
-			if (!options) {
-				alert(`登録オプションの取得に失敗しました: ${message}`)
-				return
-			}
-			const cred = await startRegistration({ optionsJSON: options })
-			const { verified, message: verificationMessage } = await verifyRegistration(email, cred)
-			if (verified) {
+				const { options, message } = await getRegistrationOptions(email)
+				if (!options) {
+					throw new Error(`登録オプションの取得に失敗しました: ${message}`)
+				}
+
+				const cred = await startRegistration({ optionsJSON: options })
+				const { verified, message: verificationMessage } = await verifyRegistration(email, cred)
+				if (!verified) {
+					throw new Error(`パスキー登録の検証に失敗しました: ${verificationMessage}`)
+				}
+
 				alert("パスキー登録に成功しました")
-			} else {
-				alert(`パスキー登録に失敗しました: ${verificationMessage}`)
+			} catch (error) {
+				alert(`パスキー登録中にエラーが発生しました: ${error}`)
 			}
 		})
 	}

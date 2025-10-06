@@ -10,22 +10,26 @@ export function PasskeyVerifyBlock({ email }: { email: string }) {
 
 	const handleVerify = () => {
 		startTransition(async () => {
-			if (!email) {
-				alert("メールアドレスが取得できませんでした。サインインしてください。")
-				return
-			}
+			// 非Discoverable Credentialの検証実装
+			try {
+				if (!email) {
+					throw new Error("メールアドレスが未設定です")
+				}
 
-			const { options, message } = await getAuthenticationOptions(email)
-			if (!options) {
-				alert(`パスキー認証オプションの取得に失敗しました: ${message}`)
-				return
-			}
-			const cred = await startAuthentication({ optionsJSON: options })
-			const { verified, message: verificationMessage } = await verifyAuthentication(email, cred)
-			if (verified) {
+				const { options, message } = await getAuthenticationOptions(email)
+				if (!options) {
+					throw new Error(`認証オプションの取得に失敗しました: ${message}`)
+				}
+
+				const cred = await startAuthentication({ optionsJSON: options })
+				const { verified, message: verificationMessage } = await verifyAuthentication(email, cred)
+				if (!verified) {
+					throw new Error(`パスキー認証の検証に失敗しました: ${verificationMessage}`)
+				}
+
 				alert("パスキー認証に成功しました")
-			} else {
-				alert(`パスキー認証に失敗しました: ${verificationMessage}`)
+			} catch (error) {
+				alert(`パスキー認証中にエラーが発生しました: ${error}`)
 			}
 		})
 	}
