@@ -8,12 +8,12 @@ import {
 	verifyRegistrationResponse,
 } from "@simplewebauthn/server"
 import {
-	createPasskeyRegistration,
 	createUserPasskey,
 	getAllUserPasskeys,
 	getPasskeyRegistration,
 	getUserIDByEmail,
 	type Passkey,
+	setPasskeyRegistration,
 } from "@/lib/db/memory"
 
 /**
@@ -46,7 +46,7 @@ export async function getRegistrationOptions(email: string): Promise<Registerati
 	// registered authenticators
 	const userPasskeys = getAllUserPasskeys(userID)
 
-	const options = (await generateRegistrationOptions({
+	const options: PublicKeyCredentialCreationOptionsJSON = await generateRegistrationOptions({
 		rpName,
 		rpID,
 		userName: email,
@@ -67,10 +67,10 @@ export async function getRegistrationOptions(email: string): Promise<Registerati
 			// Optional
 			authenticatorAttachment: "platform",
 		},
-	})) satisfies PublicKeyCredentialCreationOptionsJSON
+	})
 
 	// (Pseudocode) Remember these options for the user
-	createPasskeyRegistration(userID, options)
+	setPasskeyRegistration(userID, options)
 
 	console.log("=============================================")
 	console.log("① パスキー登録オプションの作成")

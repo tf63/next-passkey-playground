@@ -8,11 +8,11 @@ import {
 	verifyAuthenticationResponse,
 } from "@simplewebauthn/server"
 import {
-	createPasskeyAuthentication,
 	getAllUserPasskeys,
 	getPasskeyAuthentication,
 	getUserIDByEmail,
 	getUserPasskey,
+	setPasskeyAuthentication,
 	updateUserPasskeyCounter,
 } from "@/lib/db/memory"
 
@@ -41,17 +41,17 @@ export async function getAuthenticationOptions(email: string) {
 	// registered authenticators
 	const userPasskeys = getAllUserPasskeys(userID)
 
-	const options = (await generateAuthenticationOptions({
+	const options: PublicKeyCredentialRequestOptionsJSON = await generateAuthenticationOptions({
 		rpID,
 		// Require users to use a previously-registered authenticator
 		allowCredentials: userPasskeys.map((passkey) => ({
 			id: passkey.id,
 			transports: passkey.transports,
 		})),
-	})) as PublicKeyCredentialRequestOptionsJSON
+	})
 
 	// (Pseudocode) Remember this challenge for this user
-	createPasskeyAuthentication(userID, options)
+	setPasskeyAuthentication(userID, options)
 
 	console.log("=============================================")
 	console.log("① パスキー認証オプションの作成")

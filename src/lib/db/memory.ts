@@ -88,14 +88,26 @@ const passkeyAuthenticationDB: PasskeyAuthenticationData[] = []
 export function getPasskeyRegistration(userID: string) {
 	return passkeyRegistrationDB.find((registration) => registration.userID === userID)
 }
-export function createPasskeyRegistration(userID: string, options: PublicKeyCredentialCreationOptionsJSON) {
-	const data = { userID, options }
-	passkeyRegistrationDB.push(data)
+export function setPasskeyRegistration(userID: string, options: PublicKeyCredentialCreationOptionsJSON) {
+	const newData = { userID, options }
+	const existingIndex = passkeyRegistrationDB.findIndex((registration) => registration.userID === userID)
+	if (existingIndex === -1) {
+		passkeyRegistrationDB.push(newData)
+		return
+	}
+
+	passkeyRegistrationDB[existingIndex] = newData
 }
 export function getPasskeyAuthentication(userID: string) {
 	return passkeyAuthenticationDB.find((authentication) => authentication.userID === userID)
 }
-export function createPasskeyAuthentication(userID: string, options: PublicKeyCredentialRequestOptionsJSON) {
-	const data = { userID, options }
-	passkeyAuthenticationDB.push(data)
+export function setPasskeyAuthentication(userID: string, options: PublicKeyCredentialRequestOptionsJSON) {
+	const newData = { userID, options }
+	const existingIndex = passkeyAuthenticationDB.findIndex((authentication) => authentication.userID === userID)
+	if (existingIndex === -1) {
+		passkeyAuthenticationDB.push(newData)
+		return
+	}
+
+	passkeyAuthenticationDB[existingIndex] = newData
 }
