@@ -11,10 +11,10 @@ import { cookies } from "next/headers"
 import { ORIGIN, RP_ID } from "./const"
 import {
 	deletePasskeyAuthenticationChallengeBySessionID,
-	getAllUserPasskeys,
 	getPasskeyAuthenticationChallengeBySessionID,
+	getPasskeyByID,
 	getUserIDByEmail,
-	getUserPasskey,
+	getUserPasskeys,
 	savePasskey,
 	setPasskeyAuthenticationChallenge,
 } from "@/lib/db/memory"
@@ -26,7 +26,7 @@ export async function getAuthenticationOptions(email: string) {
 
 	// (Pseudocode) Retrieve any of the user's previously-
 	// registered authenticators
-	const userPasskeys = getAllUserPasskeys(userID)
+	const userPasskeys = getUserPasskeys(userID)
 
 	const options: PublicKeyCredentialRequestOptionsJSON = await generateAuthenticationOptions({
 		rpID: RP_ID,
@@ -76,7 +76,7 @@ export async function verifyAuthentication(email: string, body: AuthenticationRe
 
 	// (Pseudocode} Retrieve a passkey from the DB that
 	// should match the `id` in the returned credential
-	const passkey = getUserPasskey(userID, body.id)
+	const passkey = getPasskeyByID(body.id)
 	if (!passkey) return { verified: false, message: "Passkey not found" }
 
 	let verification: VerifiedAuthenticationResponse

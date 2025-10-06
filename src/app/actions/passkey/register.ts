@@ -9,11 +9,11 @@ import {
 } from "@simplewebauthn/server"
 import { ORIGIN, RP_ID, RP_NAME } from "./const"
 import {
-	createUserPasskey,
+	createPasskey,
 	deletePasskeyRegistrationChallengeByUserID,
-	getAllUserPasskeys,
 	getPasskeyRegistrationChallengeByUserID,
 	getUserIDByEmail,
+	getUserPasskeys,
 	type Passkey,
 	setPasskeyRegistrationChallenge,
 } from "@/lib/db/memory"
@@ -30,7 +30,7 @@ export async function getRegistrationOptions(email: string): Promise<Registerati
 
 	// (Pseudocode) Retrieve any of the user's previously-
 	// registered authenticators
-	const userPasskeys = getAllUserPasskeys(userID)
+	const userPasskeys = getUserPasskeys(userID)
 
 	const options: PublicKeyCredentialCreationOptionsJSON = await generateRegistrationOptions({
 		rpName: RP_NAME,
@@ -123,7 +123,7 @@ export async function verifyRegistration(email: string, body: RegistrationRespon
 
 	// (Pseudocode) Save the authenticator info so that we can
 	// get it by user ID later
-	createUserPasskey(newPasskey)
+	createPasskey(newPasskey)
 
 	console.log("=============================================")
 	console.log("[Server -> Server] ④ パスキーを保存")

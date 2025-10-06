@@ -61,13 +61,13 @@ export type Passkey = {
 }
 const passkeyDB: Passkey[] = []
 
-export function getAllUserPasskeys(userID: string) {
+export function getUserPasskeys(userID: string) {
 	return passkeyDB.filter((passkey) => passkey.userID === userID)
 }
-export function getUserPasskey(userID: string, passkeyId: Base64URLString) {
-	return passkeyDB.find((passkey) => passkey.id === passkeyId && passkey.userID === userID)
+export function getPasskeyByID(passkeyID: Base64URLString) {
+	return passkeyDB.find((passkey) => passkey.id === passkeyID)
 }
-export function createUserPasskey(passkey: Passkey) {
+export function createPasskey(passkey: Passkey) {
 	passkeyDB.push(passkey)
 }
 export function savePasskey(passkey: Passkey) {
