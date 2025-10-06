@@ -7,6 +7,7 @@ import {
 	type VerifiedRegistrationResponse,
 	verifyRegistrationResponse,
 } from "@simplewebauthn/server"
+import { ORIGIN, RP_ID, RP_NAME } from "./const"
 import {
 	createUserPasskey,
 	deletePasskeyRegistrationChallengeByUserID,
@@ -16,23 +17,6 @@ import {
 	type Passkey,
 	setPasskeyRegistrationChallenge,
 } from "@/lib/db/memory"
-
-// NOTE: 実際には環境変数から読み込む、今回は環境構築をスキップするためにベタ書き
-/**
- * Human-readable title for your website
- */
-const rpName = "SimpleWebAuthn Example"
-/**
- * A unique identifier for your website. 'localhost' is okay for
- * local dev
- */
-const rpID = "localhost"
-/**
- * The URL at which registrations and authentications should occur.
- * 'http://localhost' and 'http://localhost:PORT' are also valid.
- * Do NOT include any trailing /
- */
-const origin = `http://${rpID}:3168`
 
 type RegisterationOptionsResponse = {
 	options: PublicKeyCredentialCreationOptionsJSON | undefined
@@ -49,8 +33,8 @@ export async function getRegistrationOptions(email: string): Promise<Registerati
 	const userPasskeys = getAllUserPasskeys(userID)
 
 	const options: PublicKeyCredentialCreationOptionsJSON = await generateRegistrationOptions({
-		rpName,
-		rpID,
+		rpName: RP_NAME,
+		rpID: RP_ID,
 		userName: email,
 		// Don't prompt users for additional information about the authenticator
 		// (Recommended for smoother UX)
@@ -99,8 +83,8 @@ export async function verifyRegistration(email: string, body: RegistrationRespon
 		verification = await verifyRegistrationResponse({
 			response: body,
 			expectedChallenge: currentChallenge.challengeStr,
-			expectedOrigin: origin,
-			expectedRPID: rpID,
+			expectedOrigin: ORIGIN,
+			expectedRPID: RP_ID,
 		})
 	} catch (error) {
 		console.error(error)

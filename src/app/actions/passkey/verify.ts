@@ -8,6 +8,7 @@ import {
 	verifyAuthenticationResponse,
 } from "@simplewebauthn/server"
 import { cookies } from "next/headers"
+import { ORIGIN, RP_ID } from "./const"
 import {
 	deletePasskeyAuthenticationChallengeBySessionID,
 	getAllUserPasskeys,
@@ -17,19 +18,6 @@ import {
 	savePasskey,
 	setPasskeyAuthenticationChallenge,
 } from "@/lib/db/memory"
-
-// NOTE: 実際には環境変数から読み込む、今回は環境構築をスキップするためにベタ書き
-/**
- * A unique identifier for your website. 'localhost' is okay for
- * local dev
- */
-const rpID = "localhost"
-/**
- * The URL at which registrations and authentications should occur.
- * 'http://localhost' and 'http://localhost:PORT' are also valid.
- * Do NOT include any trailing /
- */
-const origin = `http://${rpID}:3168`
 
 export async function getAuthenticationOptions(email: string) {
 	// (Pseudocode) Retrieve the logged-in user
@@ -41,7 +29,7 @@ export async function getAuthenticationOptions(email: string) {
 	const userPasskeys = getAllUserPasskeys(userID)
 
 	const options: PublicKeyCredentialRequestOptionsJSON = await generateAuthenticationOptions({
-		rpID,
+		rpID: RP_ID,
 		// Require users to use a previously-registered authenticator
 		allowCredentials: userPasskeys.map((passkey) => ({
 			id: passkey.id,
@@ -96,8 +84,8 @@ export async function verifyAuthentication(email: string, body: AuthenticationRe
 		verification = await verifyAuthenticationResponse({
 			response: body,
 			expectedChallenge: currentChallenge.challengeStr,
-			expectedOrigin: origin,
-			expectedRPID: rpID,
+			expectedOrigin: ORIGIN,
+			expectedRPID: RP_ID,
 			credential: {
 				id: passkey.id,
 				publicKey: passkey.publicKey,
