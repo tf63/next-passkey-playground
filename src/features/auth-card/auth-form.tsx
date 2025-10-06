@@ -1,11 +1,14 @@
 "use client"
 
+import { startAuthentication } from "@simplewebauthn/browser"
 import { Key } from "lucide-react"
 import { redirect } from "next/navigation"
 import { useState, useTransition } from "react"
 import { toast } from "sonner"
+import { passkeySignInAction } from "@/app/actions/passkey/sign-in"
+import { getAuthenticationOptions } from "@/app/actions/passkey/verify-discoverable"
 import { registerAction } from "@/app/actions/password/register"
-import { signInAction } from "@/app/actions/sign-in"
+import { signInAction } from "@/app/actions/password/sign-in"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -55,13 +58,28 @@ export function AuthForm() {
 	}
 
 	const handlePasskeyLogin = () => {
-		startTransition(() => {
+		startTransition(async () => {
+			let success = false
+			// Discoverable Credentialでログイン
 			try {
-				// ここで WebAuthn / simplewebauthn の処理を呼び出す
-				console.log("Passkey login triggered")
-				// 実装例: await signIn("passkey")
-			} catch {
-				toast.error("Passkey authentication failed")
+				const { options, message } = await getAuthenticationOptions()
+				if (!options) {
+					throw new Error(`認証オプションの取得に失敗しました: ${message}`)
+				}
+
+				const cred = await startAuthentication({ optionsJSON: options })
+				const result = await passkeySignInAction({ cred })
+				if (!result.success) {
+					throw new Error("パスキー認証に失敗しました")
+				}
+
+				success = true
+			} catch (error) {
+				toast.error(`パスキー認証中にエラーが発生しました: ${error}`)
+			}
+
+			if (success) {
+				redirect("/") // NOTE: リダイレクトイベントをthrowするので注意
 			}
 		})
 	}
