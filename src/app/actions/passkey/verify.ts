@@ -18,10 +18,7 @@ import {
 	setPasskeyAuthenticationChallenge,
 } from "@/lib/db/memory"
 
-/**
- * Human-readable title for your website
- */
-// const rpName = "SimpleWebAuthn Example"
+// NOTE: 実際には環境変数から読み込む、今回は環境構築をスキップするためにベタ書き
 /**
  * A unique identifier for your website. 'localhost' is okay for
  * local dev
@@ -32,7 +29,7 @@ const rpID = "localhost"
  * 'http://localhost' and 'http://localhost:PORT' are also valid.
  * Do NOT include any trailing /
  */
-const origin = `http://${rpID}:3005`
+const origin = `http://${rpID}:3168`
 
 export async function getAuthenticationOptions(email: string) {
 	// (Pseudocode) Retrieve the logged-in user

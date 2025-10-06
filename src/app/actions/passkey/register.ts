@@ -17,6 +17,7 @@ import {
 	setPasskeyRegistrationChallenge,
 } from "@/lib/db/memory"
 
+// NOTE: 実際には環境変数から読み込む、今回は環境構築をスキップするためにベタ書き
 /**
  * Human-readable title for your website
  */
@@ -31,7 +32,7 @@ const rpID = "localhost"
  * 'http://localhost' and 'http://localhost:PORT' are also valid.
  * Do NOT include any trailing /
  */
-const origin = `http://${rpID}:3005`
+const origin = `http://${rpID}:3168`
 
 type RegisterationOptionsResponse = {
 	options: PublicKeyCredentialCreationOptionsJSON | undefined
