@@ -3,7 +3,7 @@
 import { startAuthentication } from "@simplewebauthn/browser"
 import { Key } from "lucide-react"
 import { redirect } from "next/navigation"
-import { useState, useTransition } from "react"
+import { useState } from "react"
 import { toast } from "sonner"
 import { passkeySignInAction } from "@/app/actions/passkey/sign-in"
 import { getAuthenticationOptions } from "@/app/actions/passkey/verify-discoverable"
@@ -17,71 +17,76 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 export function AuthForm() {
 	const [email, setEmail] = useState("")
 	const [password, setPassword] = useState("")
-	const [isPending, startTransition] = useTransition()
+	const [isLoading, setIsLoading] = useState(false)
 
-	const handleSignUp = (e: React.FormEvent) => {
+	const handleSignUp = async (e: React.FormEvent) => {
 		e.preventDefault()
+		setIsLoading(true)
 
-		startTransition(async () => {
+		try {
 			if (!email || !password) {
-				toast.error("Email and password are required")
-				return
+				throw new Error("Email and password are required")
 			}
 
 			const result = await registerAction({ email, password })
 			if (!result.success) {
-				toast.error(result.message)
-				return
+				throw new Error(result.message)
 			}
+		} catch (error) {
+			toast.error(error instanceof Error ? error.message : "An unexpected error occurred")
+			return
+		} finally {
+			setIsLoading(false)
+		}
 
-			redirect("/")
-		})
+		redirect("/")
 	}
 
-	const handleSignIn = (e: React.FormEvent) => {
+	const handleSignIn = async (e: React.FormEvent) => {
 		e.preventDefault()
-
-		startTransition(async () => {
+		setIsLoading(true)
+		try {
 			if (!email || !password) {
-				toast.error("Email and password are required")
-				return
+				throw new Error("Email and password are required")
 			}
 
 			const result = await signInAction({ email, password })
 			if (!result.success) {
-				toast.error(result.message)
-				return
+				throw new Error(result.message)
 			}
+		} catch (error) {
+			toast.error(error instanceof Error ? error.message : "An unexpected error occurred")
+			return
+		} finally {
+			setIsLoading(false)
+		}
 
-			redirect("/")
-		})
+		redirect("/")
 	}
 
-	const handlePasskeyLogin = () => {
-		startTransition(async () => {
-			let success = false
+	const handlePasskeyLogin = async () => {
+		setIsLoading(true)
+
+		try {
 			// Discoverable Credentialでログイン
-			try {
-				const { options, message } = await getAuthenticationOptions()
-				if (!options) {
-					throw new Error(`認証オプションの取得に失敗しました: ${message}`)
-				}
-
-				const cred = await startAuthentication({ optionsJSON: options })
-				const result = await passkeySignInAction({ cred })
-				if (!result.success) {
-					throw new Error("パスキー認証に失敗しました")
-				}
-
-				success = true
-			} catch (error) {
-				toast.error(`パスキー認証中にエラーが発生しました: ${error}`)
+			const { options, message } = await getAuthenticationOptions()
+			if (!options) {
+				throw new Error(`認証オプションの取得に失敗しました: ${message}`)
 			}
 
-			if (success) {
-				redirect("/") // NOTE: リダイレクトイベントをthrowするので注意
+			const cred = await startAuthentication({ optionsJSON: options })
+			const result = await passkeySignInAction({ cred })
+			if (!result.success) {
+				throw new Error("パスキー認証に失敗しました")
 			}
-		})
+		} catch (error) {
+			toast.error(`パスキー認証中にエラーが発生しました: ${error}`)
+			return
+		} finally {
+			setIsLoading(false)
+		}
+
+		redirect("/")
 	}
 
 	return (
@@ -120,8 +125,8 @@ export function AuthForm() {
 							onChange={(e) => setPassword(e.target.value)}
 						/>
 					</div>
-					<Button type="submit" disabled={isPending} className="w-full">
-						{isPending ? "Loading..." : "Sign In"}
+					<Button type="submit" disabled={isLoading} className="w-full">
+						{isLoading ? "Loading..." : "Sign In"}
 					</Button>
 				</form>
 
@@ -133,7 +138,7 @@ export function AuthForm() {
 				</div>
 
 				{/* Passkey Button */}
-				<Button variant="outline" className="w-full" onClick={handlePasskeyLogin} disabled={isPending}>
+				<Button variant="outline" className="w-full" onClick={handlePasskeyLogin} disabled={isLoading}>
 					<Key className="mr-2 h-5 w-5" />
 					Continue with Passkey
 				</Button>
@@ -164,8 +169,8 @@ export function AuthForm() {
 							required={true}
 						/>
 					</div>
-					<Button type="submit" disabled={isPending} className="w-full">
-						{isPending ? "Loading..." : "Sign Up"}
+					<Button type="submit" disabled={isLoading} className="w-full">
+						{isLoading ? "Loading..." : "Sign Up"}
 					</Button>
 				</form>
 			</TabsContent>
