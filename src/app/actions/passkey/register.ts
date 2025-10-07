@@ -22,12 +22,12 @@ export async function getRegistrationOptions(email: string): Promise<{
 	options: PublicKeyCredentialCreationOptionsJSON | null
 	message: string
 }> {
-	// (Pseudocode) Retrieve the user from the database
+	// Retrieve the user from the database
 	// after they've logged in
 	const user = getUserByEmail(email)
 	if (!user) return { options: null, message: "User not found" }
 
-	// (Pseudocode) Retrieve any of the user's previously-
+	// Retrieve any of the user's previously-
 	// registered authenticators
 	const userPasskeys = getUserPasskeys(user.id)
 
@@ -54,7 +54,7 @@ export async function getRegistrationOptions(email: string): Promise<{
 		},
 	})
 
-	// (Pseudocode) Remember these options for the user
+	// Remember these options for the user
 	setPasskeyRegistrationChallenge({ challengeStr: options.challenge, userID: user.id })
 
 	console.log("=============================================")
@@ -75,11 +75,11 @@ export async function verifyRegistration(
 	console.log("[Client -> Server] ② パスキーの登録リクエスト")
 	console.log(body)
 
-	// (Pseudocode) Retrieve the logged-in user
+	// Retrieve the logged-in user
 	const user = getUserByEmail(email)
 	if (!user) return { verified: false, message: "User not found" }
 
-	// (Pseudocode) Get `options.challenge` that was saved above
+	// Get `options.challenge` that was saved above
 	const currentChallenge = getPasskeyRegistrationChallengeByUserID(user.id)
 	if (!currentChallenge) return { verified: false, message: "Registration options not found" }
 
@@ -91,8 +91,7 @@ export async function verifyRegistration(
 			expectedOrigin: ORIGIN,
 			expectedRPID: RP_ID,
 		})
-	} catch (error) {
-		console.error(error)
+	} catch {
 		return { verified: false, message: "Registration verification failed" }
 	}
 
@@ -126,7 +125,7 @@ export async function verifyRegistration(
 		backedUp: credentialBackedUp,
 	} satisfies Passkey
 
-	// (Pseudocode) Save the authenticator info so that we can
+	// Save the authenticator info so that we can
 	// get it by user ID later
 	createPasskey(newPasskey)
 

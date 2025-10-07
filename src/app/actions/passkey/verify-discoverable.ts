@@ -38,7 +38,7 @@ export async function getAuthenticationOptions(): Promise<{
 		path: "/",
 	})
 
-	// (Pseudocode) Remember this challenge for this user
+	// Remember this challenge for this user
 	setPasskeyAuthenticationChallenge({ challengeStr: options.challenge, sessionID })
 
 	console.log("=============================================")
@@ -57,7 +57,7 @@ export async function verifyAuthentication(body: AuthenticationResponseJSON): Pr
 	console.log("[Client -> Server] ② パスキー認証リクエスト")
 	console.log(body)
 
-	// (Pseudocode) Get `options.challenge` that was saved above
+	// Get `options.challenge` that was saved above
 	const cookieStore = await cookies()
 	const sessionID = cookieStore.get("passkey_session_id")?.value
 	if (!sessionID) return { verified: false, message: "Session ID not found", user: null }
@@ -84,8 +84,7 @@ export async function verifyAuthentication(body: AuthenticationResponseJSON): Pr
 				transports: passkey.transports,
 			},
 		})
-	} catch (error) {
-		console.error(error)
+	} catch {
 		return { verified: false, message: "Could not verify authentication", user: null }
 	}
 

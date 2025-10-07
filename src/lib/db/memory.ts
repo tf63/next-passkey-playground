@@ -1,5 +1,5 @@
 // 実験用のインメモリDB
-// 実際のサービスでは、永続化されたDBを使用する
+// 注) 実験用に必要以上のデータを保持しているが、実際には必要最低限のデータのみを保存すること
 import "server-only"
 
 import type { AuthenticatorTransportFuture, Base64URLString, CredentialDeviceType } from "@simplewebauthn/server"
@@ -86,7 +86,6 @@ export function savePasskey(passkey: Passkey) {
 	}
 	passkeyDB[existingIndex] = passkey
 }
-
 // ----------------------------------------------------------------
 // Passkey Options Data
 // ----------------------------------------------------------------
