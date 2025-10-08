@@ -1,4 +1,4 @@
-import { Calendar, Home, Inbox, Key, Search, Settings, UserCheck, UserPlus } from "lucide-react"
+import { Key, UserCheck, UserPlus } from "lucide-react"
 import {
 	SidebarContent,
 	SidebarGroup,
@@ -12,41 +12,13 @@ import {
 const documentItems = [
 	{
 		title: "登録フロー",
-		url: "/#",
+		url: "/docs/register-flow",
 		icon: UserPlus,
 	},
 	{
 		title: "検証フロー",
-		url: "/#",
+		url: "/docs/verify-flow",
 		icon: UserCheck,
-	},
-]
-
-const dataItems = [
-	{
-		title: "Home",
-		url: "/#",
-		icon: Home,
-	},
-	{
-		title: "Inbox",
-		url: "/#",
-		icon: Inbox,
-	},
-	{
-		title: "Calendar",
-		url: "/#",
-		icon: Calendar,
-	},
-	{
-		title: "Search",
-		url: "/#",
-		icon: Search,
-	},
-	{
-		title: "Settings",
-		url: "/#",
-		icon: Settings,
 	},
 ]
 
@@ -74,24 +46,6 @@ export function DashboardSidebarContent() {
 				<SidebarGroupContent>
 					<SidebarMenu>
 						{documentItems.map((item) => (
-							<SidebarMenuItem key={item.title}>
-								<SidebarMenuButton asChild={true} tooltip={item.title}>
-									<a href={item.url}>
-										<item.icon />
-										<span>{item.title}</span>
-									</a>
-								</SidebarMenuButton>
-							</SidebarMenuItem>
-						))}
-					</SidebarMenu>
-				</SidebarGroupContent>
-			</SidebarGroup>
-
-			<SidebarGroup className="px-4">
-				<SidebarGroupLabel>Data</SidebarGroupLabel>
-				<SidebarGroupContent>
-					<SidebarMenu>
-						{dataItems.map((item) => (
 							<SidebarMenuItem key={item.title}>
 								<SidebarMenuButton asChild={true} tooltip={item.title}>
 									<a href={item.url}>

@@ -18,18 +18,18 @@ export function PasskeyVerifyBlock({ email }: { email: string }) {
 
 			const { options, message } = await getAuthenticationOptions(email)
 			if (!options) {
-				throw new Error(`認証オプションの取得に失敗しました: ${message}`)
+				throw new Error(`検証オプションの取得に失敗しました: ${message}`)
 			}
 
 			const cred = await startAuthentication({ optionsJSON: options })
 			const { verified, message: verificationMessage } = await verifyAuthentication(email, cred)
 			if (!verified) {
-				throw new Error(`パスキー認証の検証に失敗しました: ${verificationMessage}`)
+				throw new Error(`パスキー検証の検証に失敗しました: ${verificationMessage}`)
 			}
 
-			toast.info("パスキー認証に成功しました")
+			toast.info("パスキー検証に成功しました")
 		} catch (error) {
-			toast.error(`パスキー認証中にエラーが発生しました: ${error}`)
+			toast.error(`パスキー検証中にエラーが発生しました: ${error}`)
 		} finally {
 			setIsLoading(false)
 		}

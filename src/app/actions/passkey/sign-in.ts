@@ -10,8 +10,8 @@ export async function passkeySignInAction({ cred }: { cred: AuthenticationRespon
 			cred: JSON.stringify(cred),
 		})
 
-		return { success: true, message: "パスキー認証に成功しました" }
+		return { success: true, message: "パスキー検証に成功しました" }
 	} catch (error) {
-		return { success: false, message: `パスキー認証中にエラーが発生しました: ${error}` }
+		return { success: false, message: `パスキー検証中にエラーが発生しました: ${error}` }
 	}
 }

@@ -12,8 +12,8 @@ export async function signInAction({ email, password }: { email: string; passwor
 			password,
 		})
 
-		return { success: true, message: "パスワード認証に成功しました" }
+		return { success: true, message: "パスワード検証に成功しました" }
 	} catch {
-		return { success: false, message: "パスワード認証に失敗しました" }
+		return { success: false, message: "パスワード検証に失敗しました" }
 	}
 }

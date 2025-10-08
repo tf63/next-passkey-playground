@@ -54,7 +54,7 @@ export async function getAuthenticationOptions(email: string): Promise<{
 	setPasskeyAuthenticationChallenge({ challengeStr: options.challenge, sessionID })
 
 	console.log("=============================================")
-	console.log("[Client -> Server] ① パスキー認証オプションの作成")
+	console.log("[Client -> Server] ① パスキー検証オプションの作成")
 	console.log(options)
 
 	return { options, message: "Authentication options generated" }
@@ -69,7 +69,7 @@ export async function verifyAuthentication(
 	user: { id: string; email: string } | null
 }> {
 	console.log("=============================================")
-	console.log("[Client -> Server] ② パスキー認証リクエスト")
+	console.log("[Client -> Server] ② パスキー検証リクエスト")
 	console.log(body)
 
 	// Retrieve the logged-in user
@@ -111,7 +111,7 @@ export async function verifyAuthentication(
 	if (!verified) return { verified: false, message: "Could not verify authentication", user: null }
 
 	console.log("=============================================")
-	console.log("[Server -> Server] ③ パスキー認証検証結果")
+	console.log("[Server -> Server] ③ パスキー検証検証結果")
 	console.log(authenticationInfo)
 
 	// NOTE: 一部のパスキー（特にクラウド同期されるタイプ、例：AppleやGoogleのパスキー）はカウンタを更新しない場合がある
@@ -127,7 +127,7 @@ export async function verifyAuthentication(
 	console.log(passkey)
 
 	console.log("=============================================")
-	console.log("[Server -> Client] ⑤ 認証成功")
+	console.log("[Server -> Client] ⑤ 検証成功")
 	console.log(user)
 
 	deletePasskeyAuthenticationChallengeBySessionID(sessionID)

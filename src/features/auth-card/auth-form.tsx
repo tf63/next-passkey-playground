@@ -71,16 +71,16 @@ export function AuthForm() {
 			// Discoverable Credentialでログイン
 			const { options, message } = await getAuthenticationOptions()
 			if (!options) {
-				throw new Error(`認証オプションの取得に失敗しました: ${message}`)
+				throw new Error(`検証オプションの取得に失敗しました: ${message}`)
 			}
 
 			const cred = await startAuthentication({ optionsJSON: options })
 			const result = await passkeySignInAction({ cred })
 			if (!result.success) {
-				throw new Error("パスキー認証に失敗しました")
+				throw new Error("パスキー検証に失敗しました")
 			}
 		} catch (error) {
-			toast.error(`パスキー認証中にエラーが発生しました: ${error}`)
+			toast.error(`パスキー検証中にエラーが発生しました: ${error}`)
 			return
 		} finally {
 			setIsLoading(false)
