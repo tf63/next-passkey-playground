@@ -27,7 +27,7 @@ export function PasskeyVerifyBlock({ email }: { email: string }) {
 				throw new Error(`パスキー検証の検証に失敗しました: ${verificationMessage}`)
 			}
 
-			toast.info("パスキー検証に成功しました")
+			toast.success("パスキー検証に成功しました")
 		} catch (error) {
 			toast.error(`パスキー検証中にエラーが発生しました: ${error}`)
 		} finally {
